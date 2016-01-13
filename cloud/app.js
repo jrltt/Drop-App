@@ -11,6 +11,22 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 
 app.locals._ = _;
+
+var userController = require('cloud/controllers/UserController.js');
+
+app.get('/user', userController.index);
+
+app.get('/dump', function(req, res) {
+  for (var i = 0; i < 10; i++) {
+    var user = Parse.Object.extend('User');
+    user.set('username', 'Dump'+i);
+    user.set('password', 'test');
+    user.set('email', 'email'+i+'@ptchwrks.com');
+    user.set('surname', 'Sur'+i+'-name');
+    user.save();
+  };
+  res.send('10 users create');
+});
 // Renders the root of the app
 app.get('/', function(req, res) {
   res.send('home');
@@ -22,7 +38,7 @@ app.get('/tes', function(req, res) {
 
 // Accepts an email address to be saved from the landing page
 app.post('/send_email', function(req, res) {
-  var Email = Parse.Object.extend("Email");
+  var Email = Parse.Object.extend('Email');
   var email = new Email({ email: req.body.email });
   email.save().then(function() {
     res.render('home', { message: "Congrats, we'll contact you when we release!" });
