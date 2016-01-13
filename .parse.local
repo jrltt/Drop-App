@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Drop": {
+      "applicationId": "LNuagcsc9S5cK8Kvb30xXI6owBo0TSZvPGFn1F2c"
+    },
+    "_default": {
+      "link": "Drop"
+    }
+  }
+}
