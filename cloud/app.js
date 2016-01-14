@@ -17,7 +17,6 @@ app.locals.formatTime = function(time) {
   return moment(time).format('MMMM Do YYYY, h:mm a');
 };
 
-
 app.get('/user', userController.index);
 
 app.get('/dump', function(req, res) {
