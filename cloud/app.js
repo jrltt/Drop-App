@@ -54,13 +54,17 @@ app.get('/login', function(req, res) {
 
 app.post('/login', userController.login);
 
+app.get('/logout', function(req, res) {
+	Parse.User.logOut();
+	res.redirect('/');
+})
 //Basic CRUD for post
 app.get('/post', postController.index);
 app.get('/post/create', requireUser, postController.create);
-app.post('/post', postController.store);
+app.post('/post', requireUser, postController.store);
 app.get('/post/:id', postController.show);
-app.get('/post/:id/edit', postController.edit);
-app.put('/post/:id', postController.update);
+app.get('/post/:id/edit', requireUser, postController.edit);
+app.put('/post/:id', requireUser, postController.update);
 // app.del('/post/:id', postController.delete);
 
 //Dump data
