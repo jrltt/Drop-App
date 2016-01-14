@@ -10,3 +10,19 @@ exports.index = function(req, res) {
     res.send(500, 'Fail loading user index');
   });
 };
+
+exports.signup = function(req, res) {
+    var username = req.body.username;
+    var password = req.body.password;
+	// var user = new Parse.User();
+	// user.set('email', email);
+	// user.set('password', password);
+	Parse.User.logIn(username, password, {
+		success: function(user) {
+			res.send('Let\'s go!');
+		},
+		error: function(user, error) {
+			res.send('Error: '+ error.code + ' ' + error.message);
+		}
+	});
+};

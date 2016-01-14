@@ -17,8 +17,20 @@ app.locals.formatTime = function(time) {
   return moment(time).format('MMMM Do YYYY, h:mm a');
 };
 
+// Renders the root of the app
+app.get('/', function(req, res) {
+  res.render('home', {title : "Home"});
+});
+//Users
 app.get('/user', userController.index);
 
+//Signup
+app.get('/signup', function(req, res) {
+	res.render('signup');
+});
+
+app.post('/signup', userController.signup);
+//Dump data
 app.get('/dump', function(req, res) {
   for (var i = 0; i < 10; i++) {
     var User = Parse.Object.extend('User');
@@ -32,10 +44,7 @@ app.get('/dump', function(req, res) {
   res.send('10 users create');
 });
 
-// Renders the root of the app
-app.get('/', function(req, res) {
-  res.render('home', {title : "Home"});
-});
+
 
 // Accepts an email address to be saved from the landing page
 app.post('/send_email', function(req, res) {
