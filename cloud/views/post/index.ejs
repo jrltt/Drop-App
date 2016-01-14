@@ -7,6 +7,12 @@
   	<% posts.forEach(function(post) { %>
   		<li class="post_link">
 	  		<h1><a href="/post/<%= post.id %>"><%= post.get('title') %></a></h1>
+        <% author = post.get('createdBy') %>
+        <% if (author) { %>
+          <h2> <%= post.get('createdBy')%>  </h2>
+          <%} else { %> 
+            <h2>nope</h2>
+          <%}%>
         <p><%= post.get('content')%></p>
         <p><a href="/post/<%= post.id %>/edit">Edit</a></p>
   		</li>
