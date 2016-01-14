@@ -6,30 +6,48 @@ var userController = require('cloud/controllers/UserController.js'); // controla
 
 var app = express(); // init Express en Cloud code
 
-// Global app configuration section
-app.set('views', 'cloud/views');  // Specify the folder to find templates
-app.set('view engine', 'ejs');    // Set the template engine
+// Configuración global
+app.set('views', 'cloud/views');  // carpeta de templaste
+app.set('view engine', 'ejs');    // engine para los templates
 app.use(express.bodyParser());
 app.use(express.methodOverride());
 
-app.locals._ = _;
-app.locals.formatTime = function(time) {
+app.locals._ = _; // en locals se guarda underscore
+app.locals.formatTime = function(time) { // custom method para darle formato a las fechas
   return moment(time).format('MMMM Do YYYY, h:mm a');
 };
 
-// Renders the root of the app
+// root de la app
 app.get('/', function(req, res) {
   res.render('home', {title : "Home"});
 });
-//Users
+
+// Users
 app.get('/user', userController.index);
 
-//Signup
+// Signup
 app.get('/signup', function(req, res) {
-	res.render('signup');
+	res.render('user/signup');
 });
 
 app.post('/signup', userController.signup);
+
+// Log in
+app.get('/login', function(req, res) {
+	res.render('user/login');
+});
+
+app.post('/login', userController.login);
+
+//Basic CRUD for post
+app.get('/post', postController.index);
+app.get('/post/create', postController.create);
+app.post('/post', postController.store);
+app.get('/post/:id/edit', postController.edit);
+app.get('/post/:id', postController.show);
+app.put('/post/:id', postController.update);
+app.del('/post/:id', postController.delete);
+
 //Dump data
 app.get('/dump', function(req, res) {
   for (var i = 0; i < 10; i++) {
@@ -43,8 +61,6 @@ app.get('/dump', function(req, res) {
   };
   res.send('10 users create');
 });
-
-
 
 // Accepts an email address to be saved from the landing page
 app.post('/send_email', function(req, res) {
