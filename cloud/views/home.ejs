@@ -1,39 +1,12 @@
-<!doctype html>
-  <head>
-    <meta charset="utf-8">
-    <title>Anypic</title>
-  </head>
+<!-- Include the header partial -->
+<% include ./_header %>
+    
+<div class="main_content">
+  <ul>
+    <li>User index</li>
+    <li></li>
+  </ul>
+</div>
 
-  <body>
-    <div id="main">
-      <div>
-        <div id="homepage" style="">
-          <div class="leather">
-            <header>
-                           <!-- right -->
-                <div id="right">
-
-                  <h1>Please register</h1>
-
-                  <% if (locals.message) { %>
-                    <h2><%= message %></h2>
-                  <% } else { %>
-                    <h2>Get notified when we release</h2>
-                    <form action="/send_email" method="post"> 
-                      <input type="text" name="email" placeholder="Your email" />
-                      <button>Sign up</button>
-                    </form>
-                  <% } %>
-                </div>
-              </div>
-
-            </header>
-
-            <div class="footer">
-            </div>
-          </div>
-      </div>
-    </div>
-
-  </body>
-</html>
+<!-- Include the footer partial -->
+<% include ./_footer %>
