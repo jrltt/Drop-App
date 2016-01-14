@@ -1,0 +1,15 @@
+<!-- Include the header partial -->
+<% include ../_header %>
+  	
+<div class="main_content">
+  	<% users.forEach(function(user) { %>
+  		<div class="user_link">
+	  		<h1><a href="<%= '/users/' + user.id %>"><%= user.get("title") %></a></h1>
+	  		<h5><%= formatTime(user.createdAt) %></h5>
+	  		<p><%= user.get('email') %></p>
+  		</div>
+    <% }) %>
+</div>
+
+<!-- Include the footer partial -->
+<% include ../_footer %>
