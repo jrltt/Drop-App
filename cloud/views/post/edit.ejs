@@ -1,0 +1,20 @@
+<% include ../_header %>
+<h1>Edit post</h1>
+<form class='edit_post' method='post' action="<%= '/post/' + post.id %>">
+  <div class='form_section'>
+    <label for="title">Title</label>
+    <input class='form-control' name='title' value="<%= post.get('title') %>" />
+  </div>
+  <div class='form_section'>
+    <label for="content">Content</label>
+    <textarea name="content" class="form-control" rows="3"><%= post.get('content') %></textarea>
+  </div>
+  <div class='form_section'>
+    <!-- This hidden element causes express.methodOverride middleware to override
+    the HTTP method from post to put for a truly RESTful interface. -->
+    <input type='hidden' name='_method' value='put' />
+    <input class='button' type='submit' value='Update' />
+  </div>
+</form>
+
+<% include ../_footer %>

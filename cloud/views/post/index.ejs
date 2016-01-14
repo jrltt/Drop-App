@@ -6,8 +6,9 @@
 	<ul>
   	<% posts.forEach(function(post) { %>
   		<li class="post_link">
-	  		<h1><%= post.get('title') %></h1>
+	  		<h1><a href="/post/<%= post.id %>"><%= post.get('title') %></a></h1>
         <p><%= post.get('content')%></p>
+        <p><a href="/post/<%= post.id %>/edit">Edit</a></p>
   		</li>
     <% }) %>
     </ul>

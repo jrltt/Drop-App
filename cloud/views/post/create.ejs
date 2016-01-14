@@ -1,9 +1,10 @@
 <!-- Include the header partial -->
 <% title = "Create a Post" %>
 <% include ../_header %>
-  	
+<% var currentUser = Parse.User.current() %>
 <div class="content">
 	<h1><%= title %></h1>
+	<h2><%= currentUser.get('email') %></h2>
 	<form action="/post" method="POST">
 		<div class="form-group">
 			<label for="title">Title</label>
