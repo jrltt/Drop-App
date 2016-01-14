@@ -1,16 +1,31 @@
 var express = require('express');
 var moment = require('moment'); // npm para fechas
 var _ = require('underscore'); // helper de javascript
+var parseExpressCookieSession = require('parse-express-cookie-session');
+var parseExpressHttpsRedirect = require('parse-express-https-redirect');
 
-var userController = require('cloud/controllers/UserController.js'); // controlador de uusers
+
+var userController = require('cloud/controllers/UserController.js');
+var postController = require('cloud/controllers/PostController.js');
+
+var requireUser = require('cloud/require-user'); // Middleware para usuarios
 
 var app = express(); // init Express en Cloud code
 
 // Configuración global
 app.set('views', 'cloud/views');  // carpeta de templaste
 app.set('view engine', 'ejs');    // engine para los templates
+app.use(parseExpressHttpsRedirect());    // Automatically redirect non-secure urls to secure ones
 app.use(express.bodyParser());
 app.use(express.methodOverride());
+app.use(express.cookieParser('SECRET_SIGNING_KEY'));
+app.use(parseExpressCookieSession({
+  fetchUser: true,
+  key: 'user.sess',
+  cookie: {
+    maxAge: 3600000 * 24 * 30
+  }
+}));
 
 app.locals._ = _; // en locals se guarda underscore
 app.locals.formatTime = function(time) { // custom method para darle formato a las fechas
@@ -41,12 +56,12 @@ app.post('/login', userController.login);
 
 //Basic CRUD for post
 app.get('/post', postController.index);
-app.get('/post/create', postController.create);
+app.get('/post/create', requireUser, postController.create);
 app.post('/post', postController.store);
-app.get('/post/:id/edit', postController.edit);
 app.get('/post/:id', postController.show);
+app.get('/post/:id/edit', postController.edit);
 app.put('/post/:id', postController.update);
-app.del('/post/:id', postController.delete);
+// app.del('/post/:id', postController.delete);
 
 //Dump data
 app.get('/dump', function(req, res) {
