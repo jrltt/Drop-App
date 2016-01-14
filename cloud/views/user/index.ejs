@@ -1,14 +1,17 @@
 <!-- Include the header partial -->
+<% title = "User index" %>
 <% include ../_header %>
   	
 <div class="main_content">
+	<ul>
   	<% users.forEach(function(user) { %>
-  		<div class="user_link">
-	  		<h1><a href="<%= '/users/' + user.id %>"><%= user.get("title") %></a></h1>
-	  		<h5><%= formatTime(user.createdAt) %></h5>
+  		<li class="user_link">
+	  		<h2><a href="<%= '/users/' + user.id %>"><%= user.get("surname") %></a></h2>
+	  		<p><%= formatTime(user.createdAt) %></p>
 	  		<p><%= user.get('email') %></p>
-  		</div>
+  		</li>
     <% }) %>
+    </ul>
 </div>
 
 <!-- Include the footer partial -->
