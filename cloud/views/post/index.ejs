@@ -1,0 +1,17 @@
+<!-- Include the header partial -->
+<% title = "Posts index" %>
+<% include ../_header %>
+  	
+<div class="main_content">
+	<ul>
+  	<% posts.forEach(function(post) { %>
+  		<li class="post_link">
+	  		<h1><%= post.get('title') %></h1>
+        <p><%= post.get('content')%></p>
+  		</li>
+    <% }) %>
+    </ul>
+</div>
+
+<!-- Include the footer partial -->
+<% include ../_footer %>
