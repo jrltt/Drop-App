@@ -1,8 +1,10 @@
-
-// These two lines are required to initialize Express in Cloud Code.
 var express = require('express');
-var app = express();
-var _ = require('underscore');
+var moment = require('moment'); // npm para fechas
+var _ = require('underscore'); // helper de javascript
+
+var userController = require('cloud/controllers/UserController.js'); // controlador de uusers
+
+var app = express(); // init Express en Cloud code
 
 // Global app configuration section
 app.set('views', 'cloud/views');  // Specify the folder to find templates
@@ -11,14 +13,17 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 
 app.locals._ = _;
+app.locals.formatTime = function(time) {
+  return moment(time).format('MMMM Do YYYY, h:mm a');
+};
 
-var userController = require('cloud/controllers/UserController.js');
 
 app.get('/user', userController.index);
 
 app.get('/dump', function(req, res) {
   for (var i = 0; i < 10; i++) {
-    var user = Parse.Object.extend('User');
+    var User = Parse.Object.extend('User');
+    var user = new User();
     user.set('username', 'Dump'+i);
     user.set('password', 'test');
     user.set('email', 'email'+i+'@ptchwrks.com');
@@ -27,13 +32,10 @@ app.get('/dump', function(req, res) {
   };
   res.send('10 users create');
 });
+
 // Renders the root of the app
 app.get('/', function(req, res) {
-  res.send('home');
-});
-
-app.get('/tes', function(req, res) {
-  res.render('home');
+  res.render('home', {title : "Home"});
 });
 
 // Accepts an email address to be saved from the landing page
