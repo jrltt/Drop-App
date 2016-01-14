@@ -1,7 +1,8 @@
 <!-- Include the header partial -->
-<% include ./_header %>
+<% include ../_header %>
 <div class="content">
-	<form action="/signup" method="POST" class="signup">
+	<h1>Log in</h1>
+	<form action="/login" method="POST" class="login">
 		<label for="username">Username
 			<input name="username" type="text">
 		</label>
@@ -10,8 +11,8 @@
 			<input name="password" type="password">
 		</label>
 
-		<input type="submit" value="Enviar">
+		<input type="submit" value="Log in">
 	</form>
 </div>
 <!-- Include the footer partial -->
-<% include ./_footer %>
+<% include ../_footer %>
