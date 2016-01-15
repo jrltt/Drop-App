@@ -117,7 +117,41 @@ app.get('/show/:id', function(req, res) {
 	function() {
 		res.send(500, 'Fail');
 	});
+});
 
+app.get('/createAdmin', function(req, res) {
+	var user = new Parse.User();
+	user.set('username', 'jrltt');
+	user.set('password', 'test');
+	user.set('email', 'joaquin@ptchwrks.com');
+	user.set('surname', 'Joaquin');
+	user.set('genre', 'male');
+	user.save(null, {
+		success: function(user) {
+			res.send('User created: '+ user);
+		},
+		error: function(user,error) {
+			res.send('Error: '+ error.message);
+		}
+	});
+});
+app.get('/setRole', function(req, res) {
+	var User = Parse.Object.extend('User');
+	var query = new Parse.Query(User);
+	/*query.get("jrltt").then(function(user) {
+		console.log(user);
+	}, function() {
+		console.log('nope');
+	});*/ // works
+	query.equalTo("username", "jrltt");
+	query.find({
+		success: function(result) {
+			console.log('Result' + result);
+		},
+		error: function(error) {
+			console.log('Error' + error);
+		}
+	});
 });
 
 app.listen();

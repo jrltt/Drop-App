@@ -1,9 +1,11 @@
 var _ = require('underscore');
+var tagController = require('cloud/controllers/TagController.js');
 
 var Post = Parse.Object.extend('Post');
 
 exports.index = function(req, res) {
 	var query = new Parse.Query(Post);
+	query.descending('createdAt');
 	query.include('createdBy');
 	query.find().then(function(results) {
 		res.render('../views/post/index', { posts : results});
@@ -14,18 +16,31 @@ exports.index = function(req, res) {
 };
 
 exports.create = function(req, res) {
-	res.render('../views/post/create');
-}
+	var Tag = Parse.Object.extend('Tag');
+	var query = new Parse.Query(Tag);
+	query.find({
+		success: function(tags) {
+			res.render('../views/post/create', {
+				tags : tags,
+			});
+		},
+		error: function(error) {
+			res.send('error: ' + error.message);
+		}
+	});
+
+};
 
 exports.store = function(req, res) {
 	var post = new Post();
 	var title = req.body.title;
 	var content = req.body.content;
+	var tags = req.body.tag;
 	var currentUser = Parse.User.current();
 
 	post.set('title', title);
 	post.set('content', content);
-
+	post.set('tag', tags);
 	// Set up ACL & Relation (pointer)
 	var acl = new Parse.ACL();
 	acl.setPublicReadAccess(true); // lectura publica
