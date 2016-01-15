@@ -4,6 +4,7 @@ var Post = Parse.Object.extend('Post');
 
 exports.index = function(req, res) {
 	var query = new Parse.Query(Post);
+	query.include('createdBy');
 	query.find().then(function(results) {
 		res.render('../views/post/index', { posts : results});
 	},
@@ -69,27 +70,58 @@ exports.update = function(req, res) {
 };
 
 exports.show = function(req, res) {
-	var postQuery = new Parse.Query(Post);
-	postQuery.get(req.params.id).then(function(post) {
-		if (post) {
-			var query = new Parse.Query(Parse.User);
-			query.equalTo("objectId", post.get('createdBy').id);
-			query.find({
-			  success: function(results) {
-			  	console.log(results);
-			  	var username = 'test';
-			    res.render('../views/post/show', {post : post, user : username});
-			  },
-			  error: function(error) {
-			   res.render('../views/post/show', {post : post});
-			  }
+	var Post = Parse.Object.extend('Post');
+	var query = new Parse.Query(Post);
+	var tmpPost = new Post();
+	tmpPost.id = req.params.id;
+	query.include('createdBy');
+	query.get(tmpPost.id, {
+		success: function(post) {
+			// var title = post.get('title');
+			// alert('Found:' + post.get('title'));
+			res.render('../views/post/show', { 
+				post : post
 			});
-			// res.render('../views/post/show', {post : post, user : createdBy});
-		} else {
-			res.send('Not found');
+		},
+		error: function(object, error) {
+			res.send(error.message);
 		}
+	});
+	// var queryTmp = new Parse.Query(Post);
+	// queryTmp.include("user");
+	// queryTmp.equalTo("c", Parse.Object.createWithoutData("_User", createdBy);
+	// queryTmp.find({
+	// 	success: function(list) {
+	// 		console.log(list);
+	// },
+	// 	error: function(object, error) {
+	// 		console.error(error);
+	// 		// The object was not retrieved successfully.
+	// 		// error is a Parse.Error with an error code and description.
+	// }
+	// });
+	// var postQuery = new Parse.Query(Post);
+
+	/*postQuery.get(req.params.id).then(function(post) {
+		// if (post) {
+		// 	var query = new Parse.Query(Parse.User);
+		// 	query.equalTo("objectId", post.get('createdBy').id);
+		// 	query.find({
+		// 	  success: function(results) {
+		// 	  	console.log(results);
+		// 	  	var username = 'test';
+		// 	    res.render('../views/post/show', {post : post, user : username});
+		// 	  },
+		// 	  error: function(error) {
+		// 	   res.render('../views/post/show', {post : post});
+		// 	  }
+		// 	});
+		// 	// res.render('../views/post/show', {post : post, user : createdBy});
+		// } else {
+		// 	res.send('Not found');
+		// }
 	},
 	function() {
 		res.send(500, 'Fail.');
-	})
+	})*/
 };

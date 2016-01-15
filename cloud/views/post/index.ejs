@@ -9,7 +9,7 @@
 	  		<h1><a href="/post/<%= post.id %>"><%= post.get('title') %></a></h1>
         <% author = post.get('createdBy') %>
         <% if (author) { %>
-          <h2> <%= post.get('createdBy')%>  </h2>
+          <h2> <%= post.get('createdBy').get('username') %>  </h2>
           <%} else { %> 
             <h2>nope</h2>
           <%}%>
