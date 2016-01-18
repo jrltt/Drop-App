@@ -43,23 +43,24 @@ exports.store = function(req, res) {
 	// Set up Relation (Array)
 	var tags = new Array();
 	for (var i = 0; i < req.body.tag.length; i++) {
-		// var Tag = Parse.Object.extend('Tag');
-		// var tagQuery = new Parse.Query(Tag);
+		var Tag = Parse.Object.extend('Tag');
+		var tagQuery = new Parse.Query(Tag);
 		// var tag = new Tag();
-		// tagQuery.equalTo('objectId', req.body.tag[i]);
-		// tagQuery.get(req.body.tag[i],{
-		// 	success: function(tag) {
-		// 		var name = tag.get('name');
-		// 		tags.push(name);
-		// 	},
-		// 	error: function(error) {
-		// 		alert('Error found: ' + error.message);
-		// 	}
-		// })
+		// tagQuery.get('objectId', req.body.tag[i]);
+		tagQuery.get(req.body.tag[i],{
+			success: function(tag) {
+				alert('found' + tag.id);
+				var relation = post.relation('relTags');
+				relation.add(tag.id);
+			},
+			error: function(error) {
+				alert('Error found: ' + error.message);
+			}
+		})
 		// tag.set('name', req.body.tag[i]);
-		tags.push(req.body.tag[i]);
+		// tags.push(req.body.tag[i]);
 	};
-	post.set('tags', tags);
+	// post.set('relTags', tags);
 
 	// Set up ACL & Relation (pointer)
 	var acl = new Parse.ACL();

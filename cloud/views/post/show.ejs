@@ -6,8 +6,8 @@
 	<h1>Title: <%= post.get('title') %></h1>
 	<h5>Author: <%= post.get('createdBy').get('surname') %></h5>
 	<p>Content: <%= post.get('content') %></p>
-	<% if (post.get('tags')) { %>
-		<% 	var tags = post.get('tags'); %>
+	<% if (post.get('relTags')) { %>
+		<% 	var tags = post.get('relTags'); %>
 		<ul class="list-inline">Tags: 
 		<% 	for (var i = 0; i < tags.length; i++) { %>
 			<li><%= tags[i] %></li>

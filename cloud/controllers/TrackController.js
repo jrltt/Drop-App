@@ -35,7 +35,7 @@ exports.getRelation = function(req, res) {
 					});
 				},
 				error: function(error) {
-					alert('error'+error.message);
+					alert('error relation ' + error.message);
 				}
 			});
 		},
