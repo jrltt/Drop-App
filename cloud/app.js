@@ -4,9 +4,9 @@ var _ = require('underscore'); // helper de javascript
 var parseExpressCookieSession = require('parse-express-cookie-session');
 var parseExpressHttpsRedirect = require('parse-express-https-redirect');
 
-
 var userController = require('cloud/controllers/UserController.js');
 var postController = require('cloud/controllers/PostController.js');
+var trackController = require('cloud/controllers/TrackController.js');
 
 var requireUser = require('cloud/require-user'); // Middleware para usuarios
 
@@ -67,8 +67,11 @@ app.get('/post/:id/edit', requireUser, postController.edit);
 app.put('/post/:id', requireUser, postController.update);
 // app.del('/post/:id', postController.delete);
 
+app.get('/track', trackController.setRelation);
+app.get('/getTrack', trackController.getRelation);
+
 //Dump data
-app.get('/dump', function(req, res) {
+/*app.get('/dump', function(req, res) {
   for (var i = 0; i < 10; i++) {
     var User = Parse.Object.extend('User');
     var user = new User();
@@ -80,6 +83,7 @@ app.get('/dump', function(req, res) {
   };
   res.send('10 users create');
 });
+*/
 
 // Accepts an email address to be saved from the landing page
 app.post('/send_email', function(req, res) {
@@ -107,18 +111,6 @@ app.get('/create', function(req, res) {
 	})
 });
 
-app.get('/show/:id', function(req, res) {
-	var Track = Parse.Object.extend("Track");
-	var trackQuery = new Parse.Query(Track);
-
-	trackQuery.get(req.params.id).then(function(track) {
-		res.send(track);
-	},
-	function() {
-		res.send(500, 'Fail');
-	});
-});
-
 app.get('/createAdmin', function(req, res) {
 	var user = new Parse.User();
 	user.set('username', 'jrltt');
@@ -135,23 +127,33 @@ app.get('/createAdmin', function(req, res) {
 		}
 	});
 });
+
 app.get('/setRole', function(req, res) {
 	var User = Parse.Object.extend('User');
 	var query = new Parse.Query(User);
-	/*query.get("jrltt").then(function(user) {
-		console.log(user);
+	var user = new User();
+	user.id = 'btOGW8WJBv';
+	query.get(user).then(function(user) {
+		var roleACL = new Parse.ACL();
+		roleACL.setPublicReadAccess(true);
+		// roleACL.setWriteAccess(user.id, true);
+		var role = new Parse.Role("adminTest", roleACL);
+		var relation = role.relation('users');
+		relation.add(user.id);
+		role.save();
+		alert('role save');
 	}, function() {
 		console.log('nope');
-	});*/ // works
-	query.equalTo("username", "jrltt");
-	query.find({
-		success: function(result) {
-			console.log('Result' + result);
-		},
-		error: function(error) {
-			console.log('Error' + error);
-		}
-	});
+	}); // works
+	// query.equalTo("username", "jrltt");
+	// query.find({
+	// 	success: function(result) {
+	// 		console.log('Result' + result);
+	// 	},
+	// 	error: function(error) {
+	// 		console.log('Error' + error);
+	// 	}
+	// });
 });
 
 app.listen();
