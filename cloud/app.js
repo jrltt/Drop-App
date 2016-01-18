@@ -68,7 +68,8 @@ app.put('/post/:id', requireUser, postController.update);
 // app.del('/post/:id', postController.delete);
 
 app.get('/track', trackController.setRelation);
-app.get('/getTrack', trackController.getRelation);
+app.get('/track/:id', trackController.getRelation);
+app.get('/tracks', trackController.index);
 
 //Dump data
 /*app.get('/dump', function(req, res) {
