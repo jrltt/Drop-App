@@ -19,7 +19,7 @@
 			<% for (var i = 0; i < tags.length; i++) {%>
 				<div class="checkbox">
 					<label for="<%= tags[i].get('name') %>">
-						<input type="checkbox" name="tag[]" value="<%= tags[i].id %>">
+						<input type="checkbox" name="tag[]" value="<%= tags[i].get('name') %>">
 						<%= tags[i].get('name') %>
 					</label>
 				</div>
