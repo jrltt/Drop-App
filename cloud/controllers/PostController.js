@@ -35,12 +35,32 @@ exports.store = function(req, res) {
 	var post = new Post();
 	var title = req.body.title;
 	var content = req.body.content;
-	var tags = req.body.tag;
 	var currentUser = Parse.User.current();
 
 	post.set('title', title);
 	post.set('content', content);
-	post.set('tag', tags);
+	
+	// Set up Relation (Array)
+	var tags = new Array();
+	for (var i = 0; i < req.body.tag.length; i++) {
+		// var Tag = Parse.Object.extend('Tag');
+		// var tagQuery = new Parse.Query(Tag);
+		// var tag = new Tag();
+		// tagQuery.equalTo('objectId', req.body.tag[i]);
+		// tagQuery.get(req.body.tag[i],{
+		// 	success: function(tag) {
+		// 		var name = tag.get('name');
+		// 		tags.push(name);
+		// 	},
+		// 	error: function(error) {
+		// 		alert('Error found: ' + error.message);
+		// 	}
+		// })
+		// tag.set('name', req.body.tag[i]);
+		tags.push(req.body.tag[i]);
+	};
+	post.set('tags', tags);
+
 	// Set up ACL & Relation (pointer)
 	var acl = new Parse.ACL();
 	acl.setPublicReadAccess(true); // lectura publica
