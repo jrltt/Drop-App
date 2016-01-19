@@ -130,22 +130,37 @@ app.get('/createAdmin', function(req, res) {
 });
 
 app.get('/setRole', function(req, res) {
-	var User = Parse.Object.extend('User');
-	var query = new Parse.Query(User);
-	var user = new User();
-	user.id = 'btOGW8WJBv';
-	query.get(user).then(function(user) {
-		var roleACL = new Parse.ACL();
-		roleACL.setPublicReadAccess(true);
-		// roleACL.setWriteAccess(user.id, true);
-		var role = new Parse.Role("adminTest", roleACL);
-		var relation = role.relation('users');
-		relation.add(user.id);
-		role.save();
-		alert('role save');
-	}, function() {
-		console.log('nope');
-	}); // works
+
+   var adminRoleACL = new Parse.ACL();
+    adminRoleACL.setPublicReadAccess(false);
+    adminRoleACL.setPublicWriteAccess(false);
+    var adminRole = new Parse.Role("administrator", adminRoleACL);
+    adminRole.getUsers().add(Parse.User.current());
+    adminRole.save();
+    alert('well done!' + adminRole);
+    
+  // role.getUsers().add(Parse.User.current());
+  // role.save();
+  // if ( role ) {
+  //   alert('role set');  
+  // }
+  
+	// var User = Parse.Object.extend('User');
+	// var query = new Parse.Query(User);
+	// var user = new User();
+	// user.id = 'btOGW8WJBv';
+	// query.get(Parse.User.current()).then(function(user) {
+	// 	var roleACL = new Parse.ACL();
+	// 	roleACL.setPublicReadAccess(true);
+	// 	// roleACL.setWriteAccess(user.id, true);
+	// 	var role = new Parse.Role("adminTest", roleACL);
+	// 	var relation = role.relation('users');
+	// 	relation.add(user.id);
+	// 	role.save();
+	// 	alert('role save');
+	// }, function() {
+	// 	console.log('nope');
+	// }); // works
 	// query.equalTo("username", "jrltt");
 	// query.find({
 	// 	success: function(result) {
