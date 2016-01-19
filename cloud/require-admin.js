@@ -18,15 +18,6 @@ module.exports = function(req, res, next) {
         }, function(error){
           console.log('error ' + error.message);
         });
-          /*success: function(found) {
-
-            console.log('EY! is a ADMIN!' + JSON.stringify(found));
-            next();
-          },
-          error: function(error) {
-            res.send('Error: ' + error.message);
-          }
-        });*/
       },
       error: function(error) {
         res.json('You need to be THE ADMIN. Keep walking');
