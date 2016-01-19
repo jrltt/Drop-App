@@ -41,7 +41,8 @@ exports.store = function(req, res) {
 	post.set('content', content);
 	
 	// Set up Relation (Array)
-	var tags = new Array();
+	var relation = post.relation('relTags');
+
 	for (var i = 0; i < req.body.tag.length; i++) {
 		var Tag = Parse.Object.extend('Tag');
 		var tagQuery = new Parse.Query(Tag);
@@ -69,6 +70,8 @@ exports.store = function(req, res) {
 		// Set (pointer) para asignar el usuario que ha creado el post
 		post.set('createdBy', currentUser);
 		acl.setWriteAccess(currentUser, true); // escritura solo este usuario
+		acl.setRoleReadAccess("Admin",true);
+    acl.setRoleWriteAccess("Admin",true);
 	}
 	post.setACL(acl);
 
@@ -100,8 +103,8 @@ exports.update = function(req, res) {
 	post.save(_.pick(req.body, 'title', 'content')).then(function() {
 		res.redirect('/post/'+ post.id);
 	},
-	function() {
-		res.send(500, 'Failed saving post');
+	function(error) {
+		res.json({'Error' : error.message});
 	});
 };
 

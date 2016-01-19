@@ -8,6 +8,7 @@ var userController = require('cloud/controllers/UserController.js');
 var postController = require('cloud/controllers/PostController.js');
 var trackController = require('cloud/controllers/TrackController.js');
 
+var requireAdmin = require('cloud/require-admin');
 var requireUser = require('cloud/require-user'); // Middleware para usuarios
 
 var app = express(); // init Express en Cloud code
@@ -190,6 +191,11 @@ app.get('/createAdmin', function(req, res) {
 // 	// 	}
 // 	// });
 // });
+// 
+
+/**
+ * Asignar rol XX to User
+ */
 app.get('/newAdmin', function(req, res) {
   var user = Parse.User.current();
   var acl = new Parse.ACL();
@@ -225,7 +231,7 @@ app.get('/newAdmin', function(req, res) {
   });
 });
 
-app.get('/newset', function(req, res) {
+/*app.get('/newset', function(req, res) {
   Parse.Cloud.useMasterKey();
   var roleACL = new Parse.ACL();
   roleACL.setPublicReadAccess(false);
@@ -233,9 +239,9 @@ app.get('/newset', function(req, res) {
   role.getUsers().add(Parse.User.current());
   role.save();
   res.json({'role' : role});
-});
+});*/
 
-app.get('/secret', function(req, res) {
+app.get('/secret', requireAdmin, function(req, res) {
   res.json({'text' : 'super secret'});
 });
 
