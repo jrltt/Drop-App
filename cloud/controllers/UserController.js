@@ -12,13 +12,14 @@ exports.index = function(req, res) {
 };
 
 exports.signup = function(req, res) {
-    var username = req.body.username;
-    var email = req.body.email;
-    var password = req.body.password;
+  var username = req.body.username;
+  var email = req.body.email;
+  var password = req.body.password;
 	var user = new Parse.User();
 	user.set('username', username);
 	user.set('email', email);
 	user.set('password', password);
+
 	user.signUp(null, {
 		success: function(user) {
 			res.send('Let\'s go!');
