@@ -129,47 +129,155 @@ app.get('/createAdmin', function(req, res) {
 	});
 });
 
-app.get('/setRole', function(req, res) {
+// app.get('/setRole', function(req, res) {
+//   var user = Parse.User.current();
+//   var acl = new Parse.ACL();
+//   var currentId = user.id;
+//     acl.setRoleReadAccess("Admin",true);
+//     acl.setRoleWriteAccess("Admin",true);
+//     acl.setReadAccess(currentId,true);
+//     acl.setWriteAccess(currentId,true);
+//     // user.setACL(acl);
+//     // user.save();
+//     var role = new Parse.Role();
+//     var query = new Parse.Query(role);
+//     query.equalTo("objectId", "ixNRu60hIu");
+//     query.find({
+//       success: function(result) {
+//         var r = new Parse.Role('Admin', acl);
+//         r.getUsers().add(user);
+//         r.save();
 
-   var adminRoleACL = new Parse.ACL();
-    adminRoleACL.setPublicReadAccess(false);
-    adminRoleACL.setPublicWriteAccess(false);
-    var adminRole = new Parse.Role("administrator", adminRoleACL);
-    adminRole.getUsers().add(Parse.User.current());
-    adminRole.save();
-    alert('well done!' + adminRole);
-    
-  // role.getUsers().add(Parse.User.current());
-  // role.save();
-  // if ( role ) {
-  //   alert('role set');  
-  // }
+//         res.json({
+//           'res' : r,
+//         });
+//       },
+//       error: function(error) {
+//         alert('erro' + error.message);
+//       }
+//     });
   
-	// var User = Parse.Object.extend('User');
-	// var query = new Parse.Query(User);
-	// var user = new User();
-	// user.id = 'btOGW8WJBv';
-	// query.get(Parse.User.current()).then(function(user) {
-	// 	var roleACL = new Parse.ACL();
-	// 	roleACL.setPublicReadAccess(true);
-	// 	// roleACL.setWriteAccess(user.id, true);
-	// 	var role = new Parse.Role("adminTest", roleACL);
-	// 	var relation = role.relation('users');
-	// 	relation.add(user.id);
-	// 	role.save();
-	// 	alert('role save');
-	// }, function() {
-	// 	console.log('nope');
-	// }); // works
-	// query.equalTo("username", "jrltt");
-	// query.find({
-	// 	success: function(result) {
-	// 		console.log('Result' + result);
-	// 	},
-	// 	error: function(error) {
-	// 		console.log('Error' + error);
-	// 	}
-	// });
+
+//   // role.getUsers().add(Parse.User.current());
+//   // role.save();
+//   // if ( role ) {
+//   //   alert('role set');  
+//   // }
+  
+// 	// var User = Parse.Object.extend('User');
+// 	// var query = new Parse.Query(User);
+// 	// var user = new User();
+// 	// user.id = 'btOGW8WJBv';
+// 	// query.get(Parse.User.current()).then(function(user) {
+// 	// 	var roleACL = new Parse.ACL();
+// 	// 	roleACL.setPublicReadAccess(true);
+// 	// 	// roleACL.setWriteAccess(user.id, true);
+// 	// 	var role = new Parse.Role("adminTest", roleACL);
+// 	// 	var relation = role.relation('users');
+// 	// 	relation.add(user.id);
+// 	// 	role.save();
+// 	// 	alert('role save');
+// 	// }, function() {
+// 	// 	console.log('nope');
+// 	// }); // works
+// 	// query.equalTo("username", "jrltt");
+// 	// query.find({
+// 	// 	success: function(result) {
+// 	// 		console.log('Result' + result);
+// 	// 	},
+// 	// 	error: function(error) {
+// 	// 		console.log('Error' + error);
+// 	// 	}
+// 	// });
+// });
+app.get('/newAdmin', function(req, res) {
+  var user = Parse.User.current();
+  var acl = new Parse.ACL();
+  var currentId = user.id;
+  acl.setRoleReadAccess("Admin",true);
+  acl.setRoleWriteAccess("Admin",true);
+  acl.setReadAccess(currentId,true);
+  acl.setWriteAccess(currentId,true);
+  user.setACL(acl);
+  user.save();
+
+  var role = new Parse.Role();
+  var query = new Parse.Query(role);
+  query.equalTo("objectId", "ixNRu60hIu");
+  query.first({
+    success: function(result) {
+      Parse.Cloud.useMasterKey(); // Master key
+      // var role = result;
+      // var adminRelation = new Parse.Relation(result, 'users');
+      // adminRelation.add(user);
+      // role.save();
+      var admin = result;
+      admin.getUsers().add(user);
+      admin.save();
+      res.json({
+        'rol' : role,
+        'user' : user,
+      });
+    },
+    error: function(error) {
+      alert('erro' + error.message);
+    }
+  });
 });
 
+app.get('/newset', function(req, res) {
+  Parse.Cloud.useMasterKey();
+  var roleACL = new Parse.ACL();
+  roleACL.setPublicReadAccess(false);
+  var role = new Parse.Role("Administrator", roleACL);
+  role.getUsers().add(Parse.User.current());
+  role.save();
+  res.json({'role' : role});
+});
+
+app.get('/secret', function(req, res) {
+  res.json({'text' : 'super secret'});
+});
+
+app.get('/check', function(req, res) {
+  var authorized = false;
+  console.log('Before test: Auth = ' + authorized);
+
+  var queryRole = new Parse.Query(Parse.Role);
+  queryRole.equalTo('name', 'Admin');
+  queryRole.first({
+      success: function(result) { // Role Object
+
+         console.log("Okay, that's a start... in success 1 with results: " + result);
+
+          var role = result;
+          var adminRelation = new Parse.Relation(role, 'users');
+          var queryAdmins = adminRelation.query();
+          if ( !Parse.User.current() ) return;
+          console.log('current ID: ' + Parse.User.current().id);
+          queryAdmins.equalTo('objectId', Parse.User.current().id);
+          queryAdmins.first({
+              success: function(result) {    // User Object
+                // console.log('result queryAdmin: ' + result);
+                  var user = result;
+                  if ( user.length === 0 ) {
+                    res.json({'console' : 'Shiet, user not Admin'});
+                  } else {
+                    authorized = true;
+                    console.log('Auth = ' + authorized);
+                    res.json({'result inside queryAdmin ' : result});
+                  }
+              },
+              error: function(error) {
+                res.json({'error' : error.message});
+              }
+          });
+      },
+      error: function(error) {
+          console.log("Bruh, can't find the Admin role " + error.message);
+      }
+  }).then(function() {
+      console.log('After test: Auth = ' + authorized);
+  });
+});
 app.listen();
