@@ -12,9 +12,9 @@ exports.index = function(req, res) {
 };
 
 exports.signup = function(req, res) {
-  var username = req.body.username;
-  var email = req.body.email;
-  var password = req.body.password;
+	var username = req.body.username;
+	var email = req.body.email;
+	var password = req.body.password;
 	var user = new Parse.User();
 	user.set('username', username);
 	user.set('email', email);
@@ -22,10 +22,16 @@ exports.signup = function(req, res) {
 
 	user.signUp(null, {
 		success: function(user) {
-			res.send('Let\'s go!');
+			var acl = new Parse.ACL(user);
+			acl.setRoleReadAccess("User", true);
+			acl.setRoleWriteAccess("User", true);
+			acl.setPublicReadAccess(true);
+			user.setACL(acl);
+			console.log(JSON.stringify(user));
+			res.redirect('post');
 		},
 		error: function(user, error) {
-			res.send('Error: '+ error.code + ' ' + error.message);
+			res.send('Error code: '+ error.code + ' ** Error message:' + error.message);
 		}
 	});
 };
