@@ -34,9 +34,9 @@ app.locals.formatTime = function(time) { // custom method para darle formato a l
 };
 
 // root de la app
-app.get('/', function(req, res) {
-  res.render('home', {title : "Home"});
-});
+// app.get('/', function(req, res) {
+//   res.render('home', {title : "Home"});
+// });
 
 // Users
 app.get('/user', userController.index);
@@ -74,7 +74,7 @@ app.get('/tracks', trackController.index);
 
 //Dump data
 /*app.get('/dump', function(req, res) {
-  for (var i = 0; i < 10; i++) {
+  for (var i = 0; i < 4; i++) {
     var User = Parse.Object.extend('User');
     var user = new User();
     user.set('username', 'Dump'+i);
@@ -83,9 +83,9 @@ app.get('/tracks', trackController.index);
     user.set('surname', 'Sur'+i+'-name');
     user.save();
   };
-  res.send('10 users create');
-});
-*/
+  res.send('4 users create');
+});*/
+
 
 // Accepts an email address to be saved from the landing page
 app.post('/send_email', function(req, res) {
