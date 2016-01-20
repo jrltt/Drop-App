@@ -73,7 +73,7 @@ app.get('/track/:id', trackController.getRelation);
 app.get('/tracks', trackController.index);
 
 //Dump data
-app.get('/dump', function(req, res) {
+/*app.get('/dump', function(req, res) {
   for (var i = 4; i < 8; i++) {
     var User = Parse.Object.extend('User');
     var user = new User();
@@ -98,7 +98,7 @@ app.get('/dump', function(req, res) {
 
   };
   res.send('4 users create');
-});
+});*/
 
 
 // Accepts an email address to be saved from the landing page
