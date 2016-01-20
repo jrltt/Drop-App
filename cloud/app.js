@@ -73,18 +73,32 @@ app.get('/track/:id', trackController.getRelation);
 app.get('/tracks', trackController.index);
 
 //Dump data
-/*app.get('/dump', function(req, res) {
-  for (var i = 0; i < 4; i++) {
+app.get('/dump', function(req, res) {
+  for (var i = 4; i < 8; i++) {
     var User = Parse.Object.extend('User');
     var user = new User();
     user.set('username', 'Dump'+i);
     user.set('password', 'test');
     user.set('email', 'email'+i+'@ptchwrks.com');
     user.set('surname', 'Sur'+i+'-name');
-    user.save();
+    user.signUp(null, {
+    	sucess: function(user) {
+    		var acl = new Parse.ACL(user);
+			acl.setPublicReadAccess(true);
+			acl.setRoleWriteAccess('User', true);
+			acl.setRoleWriteAccess('User', true);
+			user.setACL(acl);
+		    user.save();
+		    console.log('User save with ACL' + JSON.stringify(user));
+    	},
+    	error: function(error) {
+			res.send('Error code: '+ error.code + ' ** Error message:' + error.message);
+    	}
+    })
+
   };
   res.send('4 users create');
-});*/
+});
 
 
 // Accepts an email address to be saved from the landing page
