@@ -72,6 +72,9 @@ app.get('/track', trackController.setRelation);
 app.get('/track/:id', trackController.getRelation);
 app.get('/tracks', trackController.index);
 
+app.get('/parser', trackController.parse);
+app.get('/createtrack', trackController.createTrack);
+
 //Dump data
 /*app.get('/dump', function(req, res) {
   for (var i = 4; i < 8; i++) {

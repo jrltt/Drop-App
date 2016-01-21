@@ -72,3 +72,29 @@ exports.index = function(req, res) {
 		}
 	});
 };
+
+
+exports.parse = function(req, res) {
+	// var url = 'http://www.ptchwrks.com/standalone/test_song.json';
+	Parse.Cloud.httpRequest({
+	  url: 'http://www.ptchwrks.com/standalone/avichi.json'
+	}).then(function(httpResponse) {
+	  // success
+	  res.send(httpResponse.text);
+	},function(httpResponse) {
+	  // error
+	  console.error('Request failed with response code ' + httpResponse.status);
+	});
+};
+
+exports.createTrack = function(req, res) {
+	Parse.Cloud.httpRequest({
+    url: 'http://www.ptchwrks.com/standalone/avichi.json'
+  }).then(function(httpResponse) {
+    var jsonObj = JSON.parse(httpResponse.text);
+    console.log('hello');
+    res.json({'title' : jsonObj.title});
+  },function(httpResponse) {
+    console.log('Request failed with response code ' + httpResponse.status);
+  }); 
+};
